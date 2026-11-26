@@ -148,6 +148,27 @@ Hal yang wajib diketahui:
 
 Di PBJ-REVIT grid dua kolom modal memakai kelas Tailwind. Di paket ini grid memakai kelas milik paket (`.fm-grid` / `.fm-penuh` di `tabel-form.css`) agar paket tidak bergantung pada Tailwind — tampilan dan jaraknya sama.
 
+## Pengujian
+
+Paket ini memiliki tes PHPUnit untuk keluaran render kedua helper:
+
+```bash
+composer install
+composer test
+```
+
+Di GitHub, workflow **tests** menjalankan tes yang sama pada PHP 8.1–8.4 setiap push dan pull request.
+
+## Sinkronisasi dari PBJ-REVIT
+
+Sumber kebenaran kode helper adalah aplikasi PBJ-REVIT; repo ini adalah salinan terbitnya. Sesudah helper di PBJ berubah, perbarui paket ini dengan:
+
+```bash
+python3 tools/sinkron.py /path/ke/pbj-ci4
+```
+
+Skrip menarik ulang helper PHP, keempat berkas JS bersama, CSS (diekstrak dari `app.css`), dan partial modal konfirmasi — lalu menerapkan kembali penyesuaian paket (kelas `.fm-grid`, cadangan nama field CSRF, komentar) secara idempoten: bila PBJ tidak berubah, tidak ada berkas yang berubah. `assets/tanggal.js` tidak ditimpa; skrip hanya memeriksa penanda blok tanggal PBJ dan memberi peringatan bila perlu ditinjau manual.
+
 ## Lisensi
 
 MIT — lihat berkas [LICENSE](LICENSE). Silakan dipakai dan diubah; cantumkan pemberitahuan lisensinya.
