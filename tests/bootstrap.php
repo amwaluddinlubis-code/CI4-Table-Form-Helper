@@ -27,3 +27,4 @@ if (! function_exists('csrf_field')) {
 }
 
 require dirname(__DIR__) . '/src/Helpers/tabel_form_helper.php';
+require dirname(__DIR__) . '/src/Helpers/tabel_form_plus_helper.php';

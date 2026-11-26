@@ -13,6 +13,7 @@ atau dari variabel lingkungan PBJ_DIR.
 
 Yang disinkronkan:
 - src/Helpers/tabel_form_helper.php  <- app/Common.php (3 fungsi helper)
+                                        + app/Helpers/pilih_helper.php (select_cari)
 - assets/form-modal.js               <- public/assets/form-modal.js
 - assets/paginasi.js                 <- public/assets/paginasi.js
 - assets/select-cari.js              <- public/assets/select-cari.js
@@ -71,6 +72,8 @@ HEADER_HELPER = """<?php
  *   paginasi, urut klik-header, baris grup & total) dari konfigurasi.
  * - form_modal(array $konfig): modal form CRUD (Tambah/Ubah/Hapus)
  *   dari konfigurasi; perilaku di assets/form-modal.js.
+ * - select_cari(nama, opsi, terpilih, atribut): <select> searchable
+ *   (atribut data-select-cari; widget di assets/select-cari.js).
  *
  * Membutuhkan fungsi bawaan CI4: esc() dan csrf_field().
  * Muat dengan helper('tabel_form') (penemuan paket Composer) atau
@@ -93,6 +96,14 @@ def bangun_helper(pbj: pathlib.Path) -> str:
                         'Helper TABEL standar (berasal dari aplikasi PBJ-REVIT, keputusan AMWAL 25 Nov 2026)')
     body = body.replace('Helper FORM MODAL CRUD (keputusan AMWAL 25 Nov 2026)',
                         'Helper FORM MODAL CRUD (berasal dari aplikasi PBJ-REVIT, keputusan AMWAL 25 Nov 2026)')
+    # select_cari() dari app/Helpers/pilih_helper.php PBJ: docblock +
+    # fungsi dibungkus penjaga function_exists, diindentasi seperti
+    # pola app/Common.php.
+    pilih = (pbj / 'app/Helpers/pilih_helper.php').read_text()
+    potongan = pilih[pilih.index('/**'):].rstrip()
+    assert 'function select_cari' in potongan
+    terindent = '\n'.join(('    ' + baris) if baris.strip() else baris for baris in potongan.split('\n'))
+    body = body.rstrip() + "\n\nif (! function_exists('select_cari')) {\n" + terindent + "\n}\n"
     return HEADER_HELPER + body
 
 
@@ -235,7 +246,7 @@ def cek_tanggal(pbj: pathlib.Path, hasil: list) -> None:
 
 def main() -> int:
     pbj = cari_pbj()
-    wajib = [pbj / 'app/Common.php', pbj / 'public/assets/app.css',
+    wajib = [pbj / 'app/Common.php', pbj / 'app/Helpers/pilih_helper.php', pbj / 'public/assets/app.css',
              pbj / 'public/assets/form-modal.js', pbj / 'app/Views/layout/_modal_konfirmasi.php',
              pbj / 'app/Views/layout/_skrip.php']
     for b in wajib:

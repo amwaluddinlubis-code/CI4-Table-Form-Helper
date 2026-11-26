@@ -4,6 +4,25 @@ Semua perubahan penting paket ini dicatat di berkas ini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id/1.1.0/),
 versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [1.1.0] - 2026-11-27
+
+### Ditambahkan
+
+- `select_cari()` — render `<select>` searchable untuk form halaman
+  biasa (disinkronkan dari `app/Helpers/pilih_helper.php` PBJ-REVIT
+  lewat `tools/sinkron.py`).
+- `flash_toast()` — render pesan flash session (`sukses` / `galat`)
+  sebagai toast di dalam `#wadah-toast`, dengan markup yang sama
+  seperti toast sisi klien.
+- `kolom_aksi()` + `sel_aksi()` — kolom dan sel tombol Ubah/Hapus
+  otomatis untuk `tabel_bantu()`: Ubah membuka `form_modal()` dengan
+  data baris, Hapus memakai form `data-konfirmasi`.
+- Tes bertambah menjadi 25 tes / 78 asersi.
+
+Fungsi tambahan tinggal di `src/Helpers/tabel_form_plus_helper.php`
+(dirawat di paket, tidak ditimpa skrip sinkron); muat dengan
+`helper(['tabel_form', 'tabel_form_plus'])`.
+
 ## [1.0.0] - 2026-11-27
 
 Rilis perdana — ekstraksi helper tampilan dari aplikasi

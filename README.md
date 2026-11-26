@@ -8,7 +8,8 @@ Paket ini diekstrak dari aplikasi nyata [PBJ-REVIT](https://github.com/amwaluddi
 
 | Berkas | Fungsi |
 | --- | --- |
-| `src/Helpers/tabel_form_helper.php` | `tabel_bantu()`, `sel_tabel_html()`, `form_modal()` |
+| `src/Helpers/tabel_form_helper.php` | `tabel_bantu()`, `sel_tabel_html()`, `form_modal()`, `select_cari()` |
+| `src/Helpers/tabel_form_plus_helper.php` | `flash_toast()`, `kolom_aksi()`, `sel_aksi()` |
 | `src/Views/modal_konfirmasi.php` | Modal konfirmasi bersama (Hapus dsb.) + toast notifikasi |
 | `src/Commands/Publish.php` | Perintah `php spark tabel-form:publish` untuk menyalin aset ke proyek |
 | `assets/tabel-form.css` | Gaya tabel, modal form, modal konfirmasi, toast, select-cari, paginasi, isian tanggal |
@@ -50,7 +51,7 @@ Perintah publish menyalin keenam aset ke `public/assets/` dan partial modal konf
 
 ### Cara 2 — Salin manual
 
-1. Salin `src/Helpers/tabel_form_helper.php` ke `app/Helpers/` proyek Anda.
+1. Salin semua berkas `src/Helpers/` ke `app/Helpers/` proyek Anda.
 2. Salin semua berkas `assets/` ke `public/assets/` proyek Anda.
 3. Salin `src/Views/modal_konfirmasi.php` ke `app/Views/layout/_modal_konfirmasi.php`.
 
@@ -59,7 +60,7 @@ Perintah publish menyalin keenam aset ke `public/assets/` dan partial modal konf
 Muat helper di controller (atau BaseController) Anda:
 
 ```php
-helper('tabel_form');
+helper(['tabel_form', 'tabel_form_plus']);
 ```
 
 Sertakan di layout, di bagian `<head>` dan sebelum `</body>`:
@@ -67,7 +68,7 @@ Sertakan di layout, di bagian `<head>` dan sebelum `</body>`:
 ```php
 <link rel="stylesheet" href="<?= base_url('assets/tabel-form.css') ?>">
 <!-- ... konten halaman ... -->
-<div id="wadah-toast"></div>
+<div id="wadah-toast"><?= flash_toast() ?></div>
 <?= $this->include('layout/_modal_konfirmasi') ?>
 <script src="<?= base_url('assets/paginasi.js') ?>"></script>
 <script src="<?= base_url('assets/select-cari.js') ?>"></script>
@@ -143,6 +144,37 @@ Hal yang wajib diketahui:
 - Field `uang` diisi angka polos saat mode Ubah; format ribuan diterapkan otomatis. Field `tanggal` diberi data berformat ISO `yyyy-mm-dd`; tampilannya otomatis dd-mm-yyyy.
 - Mode Ubah dengan endpoint berbeda dari Tambah: arahkan `action` form lewat skrip jembatan kecil di halaman Anda (pola yang dipakai aplikasi asal), atau buat satu endpoint yang memutuskan tambah vs ubah dari field `id`.
 - Perluasan untuk modal khusus: `'tersembunyi' => [...]` (input hidden tambahan yang ikut terisi data buka), `'info_html'` (HTML mentah di puncak isi modal), `'catatan_html'` (HTML mentah di bawah field, boleh berisi input tambahan), opsi pilihan berbentuk `['label' => ..., 'data' => [...]]` untuk atribut `data-*` per opsi, dan `'segarkan' => ['#pemilih', ...]` agar sesudah simpan berhasil isi elemen target diganti dari muatan segar halaman **tanpa reload penuh**.
+
+## Fungsi tambahan
+
+### `select_cari(string $name, array $options, $selected = null, array $attrs = []): string`
+
+Merender `<select>` searchable (widget `select-cari.js`) untuk form halaman biasa, di luar modal — di dalam `form_modal()` field `pilihan` sudah otomatis memakainya. Opsi boleh berupa peta `nilai => label` atau daftar baris `['value' => ..., 'label' => ..., 'data' => [...]]` (data menjadi atribut `data-*` per opsi, berguna untuk isian otomatis). Kunci `placeholder` pada `$attrs` menjadi label opsi kosong.
+
+```php
+<?= select_cari('gedung_id', ['' => '— pilih —', 1 => 'RKB', 2 => 'Toilet'], old('gedung_id'), ['required' => true]) ?>
+```
+
+### `flash_toast(?array $pesan = null): string`
+
+Merender pesan flash session sebagai toast di dalam `<div id="wadah-toast">` (lihat Penyiapan layout): kunci flashdata `sukses` menjadi toast sukses; `galat`/`gagal`/`error` menjadi toast galat. Bisa juga diberi array langsung: `flash_toast(['sukses' => 'Tersimpan.'])`. Markupnya sama persis dengan toast yang dibuat `tampilToast()` di sisi klien, jadi skrip partial modal konfirmasi menganimasikannya tanpa kode tambahan.
+
+### `kolom_aksi()` + `sel_aksi($id, array $data, array $opsi)`
+
+Pasangan untuk kolom aksi otomatis di `tabel_bantu()` — tanpa menulis markup tombol sendiri:
+
+```php
+'kolom' => [['judul' => 'Nama'], kolom_aksi()],
+'baris' => [
+    ['sel' => ['Semen', sel_aksi($b['id'], $dataUbah, [
+        'modal'      => 'modal-barang',                          // tombol Ubah membuka form_modal ini
+        'hapus'      => base_url('barang/hapus/__ID__'),         // tombol Hapus (form data-konfirmasi)
+        'konfirmasi' => 'Hapus barang ini?',
+    ])]],
+],
+```
+
+Teks tombol dapat diganti lewat `'teks_ubah'` / `'teks_hapus'`; kosongkan `'modal'` atau `'hapus'` untuk menyembunyikan tombolnya.
 
 ## Perbedaan kecil dari versi aplikasi asal
 

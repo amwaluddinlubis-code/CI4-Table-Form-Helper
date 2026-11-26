@@ -16,17 +16,22 @@
 $baris = [];
 foreach ($barang as $b) {
     // Data baris untuk mode Ubah: nilai field menurut NAMA field + 'id'.
-    $dataUbah = esc(json_encode([
+    $dataUbah = [
         'id'    => $b['id'],
         'nama'  => $b['nama'],
         'harga' => $b['harga'],   // field uang diisi angka polos; format ribuan otomatis
         'jenis' => $b['jenis'],
-    ], JSON_HEX_APOS | JSON_HEX_QUOT), 'attr');
+    ];
     $baris[] = ['sel' => [
         esc($b['nama']),
         ['teks' => 'Rp ' . number_format((float) $b['harga'], 0, ',', '.'), 'angka' => true],
         esc($b['jenis']),
-        ['html' => '<button type="button" onclick="bukaFormModal(\'modal-barang\', ' . $dataUbah . ')">Ubah</button>'],
+        // Kolom aksi otomatis: Ubah membuka modal, Hapus lewat konfirmasi bersama.
+        sel_aksi($b['id'], $dataUbah, [
+            'modal'      => 'modal-barang',
+            'hapus'      => base_url('barang/hapus/__ID__'),
+            'konfirmasi' => 'Hapus barang ini?',
+        ]),
     ]];
 }
 echo tabel_bantu([
@@ -34,7 +39,7 @@ echo tabel_bantu([
         ['judul' => 'Nama'],
         ['judul' => 'Harga', 'angka' => true],
         ['judul' => 'Jenis'],
-        ['judul' => 'Aksi'],
+        kolom_aksi(),
     ],
     'baris'    => $baris,
     'cari'     => 'Cari barang…',  // string = kotak cari aktif; false = mati

@@ -26,7 +26,7 @@ class Barang extends BaseController
 
     public function index()
     {
-        helper('tabel_form');
+        helper(['tabel_form', 'tabel_form_plus']);
 
         return view('barang/index', [
             'judul'  => 'Data Barang',

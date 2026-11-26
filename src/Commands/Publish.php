@@ -54,7 +54,7 @@ class Publish extends BaseCommand
 
         CLI::write('');
         CLI::write('Selesai. Jangan lupa:');
-        CLI::write('1. Muat helper: helper(\'tabel_form\') di controller/base controller.');
+        CLI::write('1. Muat helper: helper([\'tabel_form\', \'tabel_form_plus\']) di controller/base controller.');
         CLI::write('2. Sertakan tabel-form.css dan keenam berkas JS di layout Anda.');
         CLI::write('3. Sertakan <div id="wadah-toast"></div> dan partial layout/_modal_konfirmasi di layout.');
     }
