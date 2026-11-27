@@ -84,7 +84,7 @@ final class PlusHelperTest extends TestCase
         $this->assertStringContainsString('action="http://contoh.test/barang/hapus/9"', $sel['html']);
         $this->assertStringContainsString('data-konfirmasi="Hapus barang ini?"', $sel['html']);
         $this->assertStringContainsString('name="csrf_test_name"', $sel['html']);
-        $this->assertStringContainsString('class="tombol bahaya"', $sel['html']);
+        $this->assertStringContainsString('class="tf-aksi bahaya"', $sel['html']);
     }
 
     public function testSelAksiDiDalamTabelBantu(): void

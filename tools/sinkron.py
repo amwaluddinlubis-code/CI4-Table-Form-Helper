@@ -33,6 +33,7 @@ peringatan bila perlu ditinjau manual).
 import hashlib
 import os
 import pathlib
+import re
 import sys
 
 PAKET = pathlib.Path(__file__).resolve().parent.parent
@@ -222,12 +223,204 @@ def render(blocks) -> str:
     return '\n\n'.join(out)
 
 
+def lingkupkan_css(hasil: str) -> str:
+    """Lingkupkan aturan elemen global warisan app.css PBJ ke kelas milik
+    paket. Di PBJ aturan `button { ... }` dan `table { ... }` memang gaya
+    global aplikasinya, tetapi di aplikasi pemakai paket aturan itu
+    menimpa seluruh shell (insiden SPJ BOSP 28 Nov 2026: semua tombol
+    aplikasi menjadi pil biru). Sesudah transformasi ini gaya tombol
+    hanya berlaku untuk .tombol dan gaya tabel hanya untuk
+    table.tf-tabel (kelas yang selalu dipasang tabel_bantu())."""
+    def ganti(teks: str, dari: str, ke: str, wajib: bool = False) -> str:
+        if wajib:
+            assert dari in teks, f'lingkupkan_css: pola wajib tidak ditemukan: {dari[:50]!r}'
+        return teks.replace(dari, ke)
+
+    hasil = re.sub(r'(?m)^table \{', 'table.tf-tabel {', hasil)
+    assert 'table.tf-tabel {' in hasil, 'lingkupkan_css: tidak ada blok table untuk dilingkupkan'
+    hasil = ganti(hasil, "td.angka,\nth.angka {", "table.tf-tabel td.angka,\ntable.tf-tabel th.angka {", wajib=True)
+    hasil = ganti(hasil, "button,\n.tombol {", ".tombol {", wajib=True)
+    hasil = ganti(hasil, "button:hover,\n.tombol:hover {", ".tombol:hover {")
+    hasil = ganti(hasil, "button:active,\n.tombol:active {", ".tombol:active {")
+    hasil = ganti(hasil, """button:focus-visible,
+.tombol:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {""", """.tombol:focus-visible,
+.mk-lapik input:focus-visible,
+.mk-lapik select:focus-visible,
+.mk-lapik textarea:focus-visible {""")
+    hasil = ganti(hasil, "button.bahaya {", ".tombol.bahaya {")
+    hasil = ganti(hasil, "button.bahaya:hover {", ".tombol.bahaya:hover {")
+    hasil = ganti(hasil, "button.kecil,\n.tombol.kecil {", ".tombol.kecil {")
+    hasil = ganti(hasil, "button.abu,\n.tombol.abu {", ".tombol.abu {")
+    hasil = ganti(hasil, "button.ekspor,\n.tombol.ekspor {", ".tombol.ekspor {")
+    hasil = ganti(hasil, "button.ekspor:hover,\n.tombol.ekspor:hover {", ".tombol.ekspor:hover {")
+    hasil = ganti(hasil, "button.abu:hover,\n.tombol.abu:hover {", ".tombol.abu:hover {")
+    hasil = ganti(hasil, "button:disabled {", ".tombol:disabled {")
+    hasil = ganti(hasil, "\ntable {\n", "\ntable.tf-tabel {\n")
+    hasil = ganti(hasil, "\ntable tr:hover td {", "\ntable.tf-tabel tr:hover td {")
+    hasil = ganti(hasil, "html.gelap table tr:hover td {", "html.gelap table.tf-tabel tr:hover td {")
+    hasil = ganti(hasil, "html.gelap body:not(.login) table tr:hover td {", "html.gelap body:not(.login) table.tf-tabel tr:hover td {")
+    hasil = ganti(hasil, "body:not(.login) table tr:hover td {", "body:not(.login) table.tf-tabel tr:hover td {")
+    hasil = ganti(hasil, "table.satu-baris ", "table.tf-tabel.satu-baris ")
+    hasil = ganti(hasil, "table.kepala-tempel thead th {", "table.tf-tabel.kepala-tempel thead th {")
+    hasil = ganti(hasil, """tbody tr:hover td,
+table.tf-tabel tr:hover td {""", """table.tf-tabel tr:hover td {""")
+    hasil = ganti(hasil, """html.gelap tbody tr:hover td,
+html.gelap table.tf-tabel tr:hover td {""", """html.gelap table.tf-tabel tr:hover td {""")
+    hasil = ganti(hasil, """.tombol,
+button {
+  transition:""", """.tombol {
+  transition:""")
+    hasil = ganti(hasil, """.tombol:hover,
+button:hover {
+  transform: translateY(-1px);
+}""", """.tombol:hover {
+  transform: translateY(-1px);
+}""")
+    for baris in hasil.split('\n'):
+        b = baris.strip()
+        assert not re.match(r'button[\s,{:.#]', b) and b != 'table {', \
+            f'lingkupkan_css: sisa aturan global: {baris!r}'
+    return hasil
+
+
+PRELUDE_BUANG = ('body:not(.login)', '.topbar', '.samping', '.tombol-user',
+                 '.grup-font', '.dropdown-user', '.tombol-ikon-top',
+                 '.tombol-samping', '.dashboard-aksi', '.tautan-pekerjaan',
+                 '.biaya-aksi', '.biaya-data', '.login-v2')
+
+
+def saring_blok(blocks) -> str:
+    """Buang blok lapisan tema khusus aplikasi PBJ (prelude menyebut
+    body:not(.login) atau kelas shell PBJ; isinya memakai variabel --ui-*
+    milik PBJ yang tidak ada di paket — di aplikasi pemakai aturan itu
+    menimpa shell, insiden SPJ BOSP 28 Nov 2026). Prelude tabel
+    beratribut data-cari/data-paginasi dilingkupkan ke table.tf-tabel."""
+    out = []
+    for prelude, body, raw in blocks:
+        if any(t in prelude for t in PRELUDE_BUANG):
+            continue
+        if (prelude.startswith('@media') or prelude.startswith('@supports')) and body is not None:
+            inner = saring_blok(parse_blocks(body))
+            if inner.strip():
+                out.append(prelude + ' {\n' + inner + '}')
+            continue
+        teks = raw.strip()
+        if prelude.startswith('table['):
+            kepala, _, ekor = teks.partition('{')
+            teks = kepala.replace('table[', 'table.tf-tabel[') + '{' + ekor
+        out.append(teks)
+    return '\n\n'.join(out)
+
+
+TAMBAHAN_CSS_PAKET = """
+/* ===== Penyesuaian paket (bukan dari app.css PBJ) =====
+   Kotak cari tabel dibuat paginasi.js tanpa kelas; di PBJ tampilannya
+   mengikuti gaya input global aplikasi yang tidak ikut terekstrak,
+   jadi paket memberinya bingkai sendiri. */
+.paginasi.cari-tabel input[type="search"] {
+  border: 1px solid var(--ta-garis-2);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 11.2px;
+  font-family: inherit;
+  background: #fff;
+  color: var(--ta-teks);
+}
+
+.paginasi.cari-tabel input[type="search"]:focus {
+  outline: none;
+  border-color: var(--ta-biru-500);
+  box-shadow: 0 0 0 3px var(--ta-biru-50);
+}
+
+/* Tombol aksi baris tabel (sel_aksi): kecil, berbingkai, sebaris —
+   sengaja BUKAN .tombol pil agar tidak bertabrakan dengan penata
+   tombol global aplikasi pemakai (ikon otomatis, target sentuh). */
+.tf-aksi {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+  font-family: inherit;
+  border: 1px solid var(--ta-garis-2);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ta-teks);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tf-aksi:hover {
+  background: var(--ta-biru-50);
+  border-color: var(--ta-biru-500);
+  color: var(--ta-biru);
+}
+
+.tf-aksi.bahaya {
+  color: #800000;
+  border-color: #d8a7a7;
+}
+
+.tf-aksi.bahaya:hover {
+  background: #fdeded;
+  border-color: #800000;
+  color: #800000;
+}
+"""
+
+
 def bangun_css(pbj: pathlib.Path) -> str:
     css = (pbj / 'public/assets/app.css').read_text()
     hasil = render(parse_blocks(css))
     assert '.fm-isi .grid' in hasil
     hasil = hasil.replace('.fm-isi .grid', '.fm-grid')
-    return HEADER_CSS + hasil + '\n'
+    hasil = saring_blok(parse_blocks(hasil))
+    hasil = lingkupkan_css(hasil)
+    assert 'body:not(.login)' not in hasil, 'masih ada sisa lapisan tema PBJ'
+    hasil = petakan_var_ui(hasil)
+    assert '--ui-' not in hasil, 'masih ada variabel --ui-* yang belum dipetakan'
+    return (HEADER_CSS + hasil + TAMBAHAN_CSS_PAKET).rstrip() + '\n'
+
+
+# app.css PBJ kini menamai token desainnya --ui-*. Nama itu TIDAK boleh
+# ikut ke paket: aplikasi pemakai (mis. SPJ BOSP) memakai nama --ui-*
+# untuk sistem desainnya sendiri, jadi mendefinisikan ulang token itu
+# di :root paket akan menimpa token aplikasi. Sebagai gantinya setiap
+# var(--ui-*) pada blok terekstrak dipetakan ke token paket --ta-*
+# atau nilai harfiah yang sama dengan :root PBJ.
+PETA_VAR_UI = {
+    '--ui-accent': 'var(--ta-biru)',
+    '--ui-accent-500': 'var(--ta-biru-500)',
+    '--ui-accent-hover': '#003a94',
+    '--ui-danger': '#800000',
+    '--ui-danger-hover': '#660000',
+    '--ui-durasi': '.18s',
+    '--ui-ease': 'ease',
+    '--ui-radius-pill': '999px',
+    '--ui-stroke-strong': 'var(--ta-garis-2)',
+    '--ui-surface': '#fff',
+    '--ui-surface-raised': '#fff',
+    '--ui-text': 'var(--ta-teks)',
+    '--ui-text-2xs': '10px',
+    '--ui-text-xs': '11.5px',
+    '--ui-text-sm': '13px',
+    '--ui-text-base': '14.5px',
+    '--ui-text-lg': '17px',
+}
+
+
+def petakan_var_ui(hasil: str) -> str:
+    def ganti(m: re.Match) -> str:
+        nama = m.group(1)
+        assert nama in PETA_VAR_UI, f'variabel {nama} belum ada di PETA_VAR_UI sinkron.py'
+        return PETA_VAR_UI[nama]
+
+    return re.sub(r'var\((--ui-[a-z0-9-]+)(?:,[^)]*)?\)', ganti, hasil)
 
 
 def cek_tanggal(pbj: pathlib.Path, hasil: list) -> None:

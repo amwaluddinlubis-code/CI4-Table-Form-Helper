@@ -114,6 +114,13 @@ window.inisiasiPaginasi = function (akar) {
     }
 
     // Kotak pencarian langsung (bila tabel bertanda data-cari).
+    // Kotak cari & paginasi ditaruh DI LUAR wadah gulir tabel bila tabelnya
+    // sudah dibungkus .bungkus-tabel di markup (mis. Analisa): kalau ikut di
+    // dalam, keduanya tergulir mendatar bersama tabel dan selebar tabel.
+    var bungkusMarkup = tabel.parentNode && tabel.parentNode.classList.contains('bungkus-tabel')
+      ? tabel.parentNode : null;
+    var indukKontrol = bungkusMarkup ? bungkusMarkup.parentNode : tabel.parentNode;
+    var titikSisip = bungkusMarkup || tabel;
     if (tabel.hasAttribute('data-cari')) {
       var kotak = document.createElement('div');
       kotak.className = 'paginasi cari-tabel';
@@ -126,12 +133,12 @@ window.inisiasiPaginasi = function (akar) {
       kotak.appendChild(masukan);
       var btnCsv = document.createElement('button');
       btnCsv.type = 'button';
-      btnCsv.className = 'kecil ekspor';
+      btnCsv.className = 'tombol kecil ekspor';
       btnCsv.textContent = 'Ekspor CSV';
       btnCsv.title = 'Unduh baris yang sedang tersaring sebagai CSV';
       btnCsv.addEventListener('click', eksporCsv);
       kotak.appendChild(btnCsv);
-      tabel.parentNode.insertBefore(kotak, tabel);
+      indukKontrol.insertBefore(kotak, titikSisip);
       masukan.addEventListener('input', function () {
         kataTampil = masukan.value;
         kata = masukan.value.trim().toLowerCase();
@@ -151,10 +158,10 @@ window.inisiasiPaginasi = function (akar) {
         '<span class="tombol-halaman"></span>' +
         // Pengecualian AGENTS.md: select Per halaman SENGAJA select biasa,
         // bukan searchable — jangan tambahkan data-select-cari di sini.
-        '<label>Per halaman <select>' +
+        '<label>Per halaman <select data-native-select>' +
         [10, 25, 50, 100].map(function (n) { return '<option value="' + n + '"' + (n === ukuran ? ' selected' : '') + '>' + n + '</option>'; }).join('') +
         '</select></label>';
-      tabel.parentNode.insertBefore(wadah, tabel.nextSibling);
+      indukKontrol.insertBefore(wadah, titikSisip.nextSibling);
       info = wadah.querySelector('.info');
       info.setAttribute('aria-live', 'polite');
       tombol = wadah.querySelector('.tombol-halaman');
@@ -324,10 +331,43 @@ window.inisiasiPaginasi = function (akar) {
       if (statusLama.kata) {
         kataTampil = String(statusLama.kata);
         kata = kataTampil.trim().toLowerCase();
-        var kotakInput = tabel.parentNode.querySelector('.cari-tabel input');
+        var kotakInput = indukKontrol.querySelector('.cari-tabel input');
         if (kotakInput) kotakInput.value = kataTampil;
       }
       halaman = parseInt(statusLama.halaman, 10) || 1;
+    }
+
+    // Tabel yang lebih lebar dari panelnya dibungkus wadah gulir mendatar
+    // (.bungkus-tabel) agar kolom paling kanan tetap dapat dicapai. Wadah
+    // dibuat SETELAH kotak cari & paginasi disisipkan supaya keduanya tidak
+    // ikut tergulir. Konsekuensi yang diterima: di dalam wadah bergulir
+    // kepala tabel tempel tidak berlaku, jadi kelas kepala-tempel dicabut.
+    // Pengamat ukuran menangani tabel di dalam <details> yang baru dibuka
+    // (saat inisialisasi lebarnya masih 0).
+    var indukTabel = tabel.parentElement;
+    var wadahGulir = null;
+    function sudahBisaDigulir() {
+      for (var el = indukTabel; el && el !== document.body; el = el.parentElement) {
+        var ox = getComputedStyle(el).overflowX;
+        if (ox === 'auto' || ox === 'scroll') return true;
+      }
+      return false;
+    }
+    function bungkusGulir() {
+      if (wadahGulir || !indukTabel || sudahBisaDigulir()) return;
+      var gaya = getComputedStyle(indukTabel);
+      var tersedia = indukTabel.clientWidth - parseFloat(gaya.paddingLeft) - parseFloat(gaya.paddingRight);
+      if (!(tersedia > 0) || tabel.scrollWidth <= tersedia + 1) return;
+      wadahGulir = document.createElement('div');
+      wadahGulir.className = 'bungkus-tabel';
+      indukTabel.insertBefore(wadahGulir, tabel);
+      wadahGulir.appendChild(tabel);
+      tabel.classList.remove('kepala-tempel');
+      tabel.style.removeProperty('--top-tempel');
+    }
+    bungkusGulir();
+    if (window.ResizeObserver) {
+      new ResizeObserver(bungkusGulir).observe(tabel);
     }
 
     gambar();

@@ -39,7 +39,8 @@ final class CrudBantuTest extends TestCase
         $h = $this->renderContoh();
         $this->assertStringContainsString('Data Barang', $h);
         $this->assertStringContainsString("bukaFormModal('barang-modal')", $h);
-        $this->assertStringContainsString('+ Tambah', $h);
+        $this->assertStringContainsString('>Tambah</button>', $h);
+        $this->assertStringNotContainsString('+ Tambah', $h);
     }
 
     public function testTabelKolomDanFormatUang(): void

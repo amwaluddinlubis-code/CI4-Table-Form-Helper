@@ -81,9 +81,7 @@ if (! function_exists('tabel_bantu')) {
         if (isset($konfig['paginasi']) && $konfig['paginasi'] !== false) {
             $atribut .= ' data-paginasi="' . (int) $konfig['paginasi'] . '"';
         }
-        if (! empty($konfig['class'])) {
-            $atribut .= ' class="' . esc((string) $konfig['class'], 'attr') . '"';
-        }
+        $atribut .= ' class="tf-tabel' . (! empty($konfig['class']) ? ' ' . esc((string) $konfig['class'], 'attr') : '') . '"';
         $h = '<table' . $atribut . '><thead><tr>';
         foreach ($kolom as $k) {
             $ka = '';
@@ -194,7 +192,7 @@ if (! function_exists('form_modal')) {
             $ph = isset($f['placeholder']) ? ' placeholder="' . esc((string) $f['placeholder'], 'attr') . '"' : '';
             $h .= '<div class="fm-field' . (! empty($f['penuh']) ? ' fm-penuh' : '') . '"><div class="fm-kotak-field">';
             if ($jenis === 'pilihan') {
-                $h .= '<select data-select-cari id="' . esc($idField, 'attr') . '" name="' . esc($nama, 'attr') . '" data-label="' . esc($label, 'attr') . '"' . $wajib . '>';
+                $h .= '<select data-select-cari data-native-select id="' . esc($idField, 'attr') . '" name="' . esc($nama, 'attr') . '" data-label="' . esc($label, 'attr') . '"' . $wajib . '>';
                 foreach ($f['opsi'] ?? [] as $nilai => $labelOpsi) {
                     $dataOpsi = '';
                     if (is_array($labelOpsi)) {
@@ -210,6 +208,15 @@ if (! function_exists('form_modal')) {
                 $h .= '<textarea id="' . esc($idField, 'attr') . '" name="' . esc($nama, 'attr') . '" data-label="' . esc($label, 'attr') . '" rows="' . (int) ($f['baris'] ?? 3) . '"' . $wajib . $ph . '></textarea>';
             } else {
                 $h .= '<input type="' . ($jenis === 'tanggal' ? 'date' : 'text') . '" id="' . esc($idField, 'attr') . '" name="' . esc($nama, 'attr') . '" data-label="' . esc($label, 'attr') . '"' . $wajib . $ph;
+                if ($jenis === 'tanggal') {
+                    // Batas tanggal opsional (mis. Bulan Terbuka pada pencatatan uang).
+                    if (! empty($f['min'])) {
+                        $h .= ' min="' . esc((string) $f['min'], 'attr') . '"';
+                    }
+                    if (! empty($f['max'])) {
+                        $h .= ' max="' . esc((string) $f['max'], 'attr') . '"';
+                    }
+                }
                 if ($jenis === 'uang') {
                     $h .= ' data-uang inputmode="numeric"';
                 } elseif ($jenis === 'angka') {
@@ -281,7 +288,7 @@ if (! function_exists('select_cari')) {
         $placeholder = (string) ($attrs['placeholder'] ?? '— pilih —');
         unset($attrs['placeholder']);
 
-        $html = '<select name="' . esc($name, 'attr') . '" data-select-cari data-placeholder="' . esc($placeholder, 'attr') . '"';
+        $html = '<select name="' . esc($name, 'attr') . '" data-select-cari data-native-select data-placeholder="' . esc($placeholder, 'attr') . '"';
         foreach ($attrs as $k => $v) {
             if ($v === true) {
                 $html .= ' ' . esc($k, 'attr');

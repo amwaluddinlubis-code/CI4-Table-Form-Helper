@@ -31,14 +31,14 @@
   color: var(--ina-red-700, #a61e1e);
 }
 
-table {
+table.tf-tabel {
   width: 100%;
   border-collapse: collapse;
-  font-size: 11.2px;
+  font-size: 13px;
 }
 
-td.angka,
-th.angka {
+table.tf-tabel td.angka,
+table.tf-tabel th.angka {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
@@ -47,14 +47,13 @@ th.angka {
 /* Gaya tombol ala Apple: pil penuh, bayangan halus, gerak tekan lembut.
    Satu keluarga untuk semua tombol — warna varian (utama/bahaya/abu/
    ekspor) tidak berubah, hanya bentuk & rasa tekannya yang disamakan. */
-button,
 .tombol {
   background: var(--ta-biru);
   color: #fff;
   border: 1px solid var(--ta-biru);
   border-radius: 999px;
   padding: 8px 18px;
-  font-size: 11.2px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: .01em;
   cursor: pointer;
@@ -65,69 +64,61 @@ button,
   transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease, transform .12s ease;
 }
 
-button:hover,
 .tombol:hover {
   background: #003a94;
   text-decoration: none;
   box-shadow: 0 2px 6px rgba(16, 24, 40, .12), 0 1px 3px rgba(16, 24, 40, .08);
 }
 
-button:active,
 .tombol:active {
   transform: scale(.97);
   box-shadow: 0 0 0 rgba(16, 24, 40, 0);
 }
 
-button:focus-visible,
 .tombol:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
+.mk-lapik input:focus-visible,
+.mk-lapik select:focus-visible,
+.mk-lapik textarea:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--ta-biru-500);
 }
 
-button.bahaya {
+.tombol.bahaya {
   background: #800000;
   border-color: #800000;
 }
 
-button.bahaya:hover {
+.tombol.bahaya:hover {
   background: #660000;
   border-color: #660000;
 }
 
-button.kecil,
 .tombol.kecil {
   padding: 5px 13px;
-  font-size: 10.4px;
+  font-size: 11.5px;
 }
 
-button.abu,
 .tombol.abu {
   background: #fff;
   color: var(--ta-teks);
   border-color: var(--ta-garis-2);
 }
 
-button.ekspor,
 .tombol.ekspor {
   background: #cdeac0;
   border-color: #a9d69a;
   color: #1e5631;
 }
 
-button.ekspor:hover,
 .tombol.ekspor:hover {
   background: #bce0ab;
 }
 
-button.abu:hover,
 .tombol.abu:hover {
   background: var(--ina-neutral-100, #f2f2f2);
 }
 
-button:disabled {
+.tombol:disabled {
   opacity: .5;
   cursor: default;
 }
@@ -137,7 +128,7 @@ form.inline button {
 }
 
 .kecil-teks {
-  font-size: 9.6px;
+  font-size: 10px;
   color: var(--ta-teks-3);
 }
 
@@ -149,7 +140,7 @@ form.inline button {
   align-items: center;
   justify-content: space-between;
   margin-top: 13px;
-  font-size: 10.4px;
+  font-size: 11.5px;
   color: var(--ta-teks-2);
 }
 
@@ -182,136 +173,6 @@ form.inline button {
   width: auto;
   margin-top: 0;
   padding: 6px 9px;
-}
-
-.tombol-samping {
-  background: #fff;
-  color: var(--ta-teks-2);
-  border: 1px solid var(--ta-garis);
-  border-radius: 9px;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.tombol-samping:hover {
-  background: var(--ina-neutral-50, #f8f8f7);
-  color: var(--ta-teks);
-}
-
-.tombol-samping svg {
-  width: 20px;
-  height: 20px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 1.9;
-}
-
-.grup-font button {
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  color: var(--ta-teks-2);
-  padding: 7px 10px;
-  font-size: 10.4px;
-  font-weight: 700;
-  cursor: pointer;
-  border-radius: 0;
-}
-
-.grup-font button:hover {
-  background: var(--ina-neutral-50, #f8f8f7);
-  color: var(--ta-biru);
-}
-
-.tombol-ikon-top {
-  background: #fff;
-  color: var(--ta-teks-2);
-  border: 1px solid var(--ta-garis);
-  border-radius: 9px;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-
-.tombol-ikon-top:hover {
-  background: var(--ina-neutral-50, #f8f8f7);
-  color: var(--ta-teks);
-}
-
-.tombol-ikon-top svg {
-  width: 20px;
-  height: 20px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 1.8;
-  display: block;
-}
-
-.tombol-ikon-top .ikon-matahari {
-  display: none;
-}
-
-html.gelap .tombol-ikon-top .ikon-bulan {
-  display: none;
-}
-
-html.gelap .tombol-ikon-top .ikon-matahari {
-  display: block;
-}
-
-.tombol-user {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  padding: 4px 8px 4px 4px;
-  border-radius: 10px;
-  cursor: pointer;
-  color: var(--ta-teks);
-  font-family: inherit;
-}
-
-.tombol-user:hover {
-  background: var(--ina-neutral-50, #f8f8f7);
-}
-
-.tombol-user .panah {
-  width: 15px;
-  height: 15px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 1.8;
-  transition: transform .2s;
-}
-
-.user-menu.buka .tombol-user .panah {
-  transform: rotate(180deg);
-}
-
-html.gelap .tombol-samping,
-html.gelap .tombol-ikon-top,
-html.gelap .grup-font {
-  background: #0f1a2e;
-}
-
-html.gelap .grup-font button:hover,
-html.gelap .tombol-user:hover,
-html.gelap .dropdown-user a:hover,
-html.gelap .samping nav a:hover,
-html.gelap .samping nav .parent:hover {
-  background: #16263f;
 }
 
 html.gelap .pesan.galat {
@@ -374,7 +235,7 @@ html.gelap .paginasi button {
   background: var(--ina-green-50, #ecfdf3);
   color: var(--ina-green-600, #039855);
   font-weight: 800;
-  font-size: 12px;
+  font-size: 13px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -393,13 +254,13 @@ html.gelap .paginasi button {
 
 .toast-isi strong {
   display: block;
-  font-size: 11.2px;
+  font-size: 13px;
   margin-bottom: 2px;
 }
 
 .toast-isi p {
   margin: 0;
-  font-size: 10.8px;
+  font-size: 11.5px;
   line-height: 1.45;
   color: var(--ta-teks-2);
 }
@@ -409,7 +270,7 @@ html.gelap .paginasi button {
   background: none;
   border: 0;
   color: var(--ta-teks-3);
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1;
   cursor: pointer;
   padding: 2px 4px;
@@ -498,13 +359,13 @@ html.gelap .toast-isi p {
 
 .mk-kartu h3 {
   margin: 0 0 8px;
-  font-size: 14.4px;
+  font-size: 14.5px;
   font-weight: 700;
 }
 
 .mk-kartu p {
   margin: 0 0 20px;
-  font-size: 11.2px;
+  font-size: 13px;
   line-height: 1.55;
   color: var(--ta-teks-2);
 }
@@ -518,7 +379,7 @@ html.gelap .toast-isi p {
   flex: 1;
   min-height: 40px;
   border-radius: 999px;
-  font-size: 11.2px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   border: 1px solid var(--ta-garis-2);
@@ -586,7 +447,7 @@ html.gelap .mk-tombol.batal {
 .mk-rinci ul {
   margin: 2px 0 12px;
   padding-left: 18px;
-  font-size: 11.2px;
+  font-size: 13px;
   line-height: 1.55;
   color: var(--ta-teks-2);
 }
@@ -594,80 +455,6 @@ html.gelap .mk-tombol.batal {
 html.gelap .mk-rinci ul {
   color: #b8c2d4;
 }
-
-.biaya-aksi button {
-  min-height: 34px;
-  padding: 6px 11px;
-}
-
-.biaya-data table.tabel-data {
-  border: 0;
-  border-radius: 10px;
-  overflow: hidden;
-  min-width: 1060px;
-}
-
-.biaya-data table.tabel-data th {
-  height: 44px;
-  background: #f8fafc;
-  border-top: 0;
-  text-transform: uppercase;
-  letter-spacing: .035em;
-  font-size: 8.8px;
-  font-weight: 600;
-  color: var(--ta-teks-3);
-  padding: 8px 11px;
-  white-space: nowrap;
-}
-
-.biaya-data table.tabel-data td {
-  height: 40px;
-  padding: 6px 9px;
-  border-bottom: 1px solid var(--ina-neutral-100, #f2f2f2);
-  vertical-align: middle;
-  transition: background .15s ease;
-}
-
-.biaya-data table.tabel-data tbody tr:hover td {
-  background: #fafcff;
-}
-
-.biaya-data table.tabel-data td.angka {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-.biaya-data .baris-uraian .kecil-teks {
-  display: block;
-  max-width: 250px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.biaya-data table.tabel-data td:nth-child(3),
-.biaya-data table.tabel-data td:nth-child(4),
-.biaya-data table.tabel-data td:nth-child(5),
-.biaya-data table.tabel-data td:nth-child(6),
-.biaya-data table.tabel-data td:nth-child(8),
-.biaya-data table.tabel-data td:nth-child(9),
-.biaya-data table.tabel-data td:nth-child(10) {
-  white-space: nowrap;
-}
-
-html.gelap .biaya-data table.tabel-data td {
-  border-color: var(--ta-garis);
-}
-
-html.gelap .biaya-data table.tabel-data tbody tr:hover td {
-  background: #13203a;
-}
-
-@media (max-width: 480px) {
-.biaya-aksi button {
-    font-size: 10px;
-    padding: 6px 8px;
-  }}
 
 @keyframes biaya-muncul {
   from {
@@ -700,7 +487,7 @@ html.gelap .biaya-data table.tabel-data tbody tr:hover td {
   border: 1px solid var(--ta-biru);
   border-radius: 10px;
   padding: 9px 16px;
-  font-size: 11.2px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: background .16s ease, box-shadow .16s ease, transform .16s ease;
@@ -737,7 +524,7 @@ html.gelap .tombol-buka-form:hover {
   text-decoration: none;
 }
 
-table {
+table.tf-tabel {
   border: 1px solid var(--ina-neutral-100, #f2f2f2);
   border-radius: 10px;
   /* clip, BUKAN hidden: overflow hidden pada tabel mematikan
@@ -745,18 +532,15 @@ table {
   overflow: clip;
 }
 
-tbody tr:hover td,
-table tr:hover td {
+table.tf-tabel tr:hover td {
   background: #fafcff;
 }
 
-.tombol,
-button {
+.tombol {
   transition: background .16s ease, border-color .16s ease, box-shadow .16s ease, transform .16s ease;
 }
 
-.tombol:hover,
-button:hover {
+.tombol:hover {
   transform: translateY(-1px);
 }
 
@@ -772,20 +556,9 @@ button:hover {
   }
 }
 
-html.gelap tbody tr:hover td,
-html.gelap table tr:hover td {
+html.gelap table.tf-tabel tr:hover td {
   background: #13203a;
 }
-
-@media (max-width: 760px) {
-.tombol-user {
-    padding: 2px;
-  }
-
-.dashboard-aksi .tombol {
-    flex: 1;
-    justify-content: center;
-  }}
 
 .sc-asli {
   position: absolute !important;
@@ -808,7 +581,7 @@ html.gelap table tr:hover td {
   background: #fff;
   color: var(--ta-teks);
   font: inherit;
-  font-size: 11.2px;
+  font-size: 13px;
   cursor: pointer;
   text-align: left;
   margin: 0;
@@ -894,7 +667,7 @@ html.gelap table tr:hover td {
   padding: 7px 9px;
   border-radius: 7px;
   cursor: pointer;
-  font-size: 11.2px;
+  font-size: 13px;
 }
 
 .sc-opsi .sc-centang {
@@ -919,7 +692,7 @@ html.gelap table tr:hover td {
   padding: 10px;
   text-align: center;
   color: var(--ta-teks-2, #64748b);
-  font-size: 11.2px;
+  font-size: 13px;
 }
 
 html.gelap .sc-tombol {
@@ -938,53 +711,38 @@ html.gelap .sc-opsi.aktif {
   background: #1e293b;
 }
 
-table.satu-baris th,
-table.satu-baris td {
+table.tf-tabel.satu-baris th,
+table.tf-tabel.satu-baris td {
   white-space: nowrap;
   padding-top: 5px;
   padding-bottom: 5px;
 }
 
-table.satu-baris td.potong {
+table.tf-tabel.satu-baris td.potong {
   max-width: 360px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-table.satu-baris form.inline {
+table.tf-tabel.satu-baris form.inline {
   display: inline-flex;
   align-items: center;
   gap: 5px;
   vertical-align: middle;
 }
 
-table.satu-baris .sel-fisik {
+table.tf-tabel.satu-baris .sel-fisik {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-table.satu-baris .sel-fisik .bar {
+table.tf-tabel.satu-baris .sel-fisik .bar {
   flex: 1 1 auto;
   min-width: 64px;
 }
 
-/* Hover nama pekerjaan: TANPA blok biru & bayangan bawaan tombol
-   (button:hover) — cukup warna huruf menjadi kuning (permintaan AMWAL,
-   25 Nov 2026). Selektor diperkuat agar menang dari lapisan
-   body:not(.login) button:hover. */
-body:not(.login) button.tautan-pekerjaan:hover {
-  background: none;
-  box-shadow: none;
-  transform: none;
-  color: #ca8a04;
-}
-
-html.gelap body:not(.login) button.tautan-pekerjaan:hover {
-  color: #facc15;
-}
-
-table.satu-baris tr.baris-detail>td {
+table.tf-tabel.satu-baris tr.baris-detail>td {
   white-space: normal;
   background: rgba(120, 140, 170, .07);
   padding: 10px 12px;
@@ -998,7 +756,7 @@ table.satu-baris tr.baris-detail>td {
 .detail-pekerjaan table.mini td {
   white-space: nowrap;
   padding: 4px 8px;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .detail-pekerjaan table.mini tr.subtotal td {
@@ -1007,167 +765,76 @@ table.satu-baris tr.baris-detail>td {
 }
 
 /* === Tabel Standar v1 (paginasi.js) === */
-th.bisa-urut { cursor: pointer; }
-
-th.bisa-urut:hover { text-decoration: underline; }
-
-th .panah-urut { font-size: 10px; opacity: .75; }
-
-tr.baris-kosong td { text-align: center; color: var(--ta-teks-2); padding: 18px 10px; font-style: italic; }
-
-.login-v2-input button{margin-right:8px;padding:7px 8px;border:0;background:transparent;color:#087b8b;font-size:11px;font-weight:800;cursor:pointer}
-
-body:not(.login) table {
-  border-color: var(--ui-border);
-  border-radius: var(--ui-radius-sm);
-  background: var(--ui-surface);
+th.bisa-urut {
+  cursor: pointer;
 }
 
-body:not(.login) tbody tr:hover td,
-body:not(.login) table tr:hover td { background: #f8fbff; }
-
-body:not(.login) tr.total td,
-body:not(.login) tr.baris-total td { background: #f3f7fc; border-top: 1px solid #dfe8f2; }
-
-body:not(.login) button,
-body:not(.login) .tombol,
-body:not(.login) .tombol-buka-form {
-  min-height: 40px;
-  border-radius: var(--ui-radius-sm);
-  font-weight: 650;
-  box-shadow: 0 5px 12px rgba(9, 104, 246, .08);
+th.bisa-urut:hover {
+  text-decoration: underline;
 }
 
-body:not(.login) button:hover,
-body:not(.login) .tombol:hover,
-body:not(.login) .tombol-buka-form:hover { box-shadow: 0 9px 18px rgba(9, 104, 246, .14); }
-
-body:not(.login) button.abu,
-body:not(.login) .tombol.abu { background: #fff; border-color: var(--ui-border-strong); box-shadow: none; }
-
-body:not(.login) button.bahaya { box-shadow: 0 5px 12px rgba(128, 0, 0, .18); }
-
-body:not(.login) button.ekspor { background: #cdeac0; border-color: #a9d69a; color: #1e5631; }
-
-body:not(.login) button.ekspor:hover { background: #bce0ab; }
-
-body:not(.login) .pesan,
-body:not(.login) .toast {
-  border-radius: var(--ui-radius-sm);
-  box-shadow: 0 6px 16px rgba(16, 34, 62, .05);
+th .panah-urut {
+  font-size: 10px;
+  opacity: .75;
 }
 
-body:not(.login) .paginasi { padding-top: 4px; }
-
-body:not(.login) .paginasi button { min-height: 34px; }
-
-html.gelap body:not(.login) .samping,
-html.gelap body:not(.login) .topbar,
-html.gelap body:not(.login) .panel,
-html.gelap body:not(.login) .kpi,
-html.gelap body:not(.login) table { background: rgba(15, 26, 46, .94); border-color: #243653; }
-
-html.gelap body:not(.login) tbody tr:hover td,
-html.gelap body:not(.login) table tr:hover td { background: #142844; }
-
-html.gelap body:not(.login) tr.total td,
-html.gelap body:not(.login) tr.baris-total td { background: #14233b; border-top-color: #2a4264; }
-
-html.gelap body:not(.login) button.abu,
-html.gelap body:not(.login) .tombol.abu { background: #15243a; border-color: #344a68; color: #edf4fa; }
+tr.baris-kosong td {
+  text-align: center;
+  color: var(--ta-teks-2);
+  padding: 18px 10px;
+  font-style: italic;
+}
 
 /* v2: header sticky + sorotan baris untuk tabel standar */
-table.kepala-tempel thead th { position: sticky; top: var(--top-tempel, 56px); z-index: 5; }
+table.tf-tabel.kepala-tempel thead th {
+  position: sticky;
+  top: var(--top-tempel, 56px);
+  z-index: 5;
+}
 
-table[data-cari] tbody tr, table[data-paginasi] tbody tr { scroll-margin-top: 128px; }
+table.tf-tabel[data-cari] tbody tr,
+table.tf-tabel[data-paginasi] tbody tr {
+  scroll-margin-top: 128px;
+}
 
-table[data-cari] tbody tr:hover td, table[data-paginasi] tbody tr:hover td { background-color: rgba(100, 116, 139, .07); }
-
-body:not(.login) button,
-body:not(.login) .tombol,
-body:not(.login) .tombol-buka-form { min-height: 30px; padding-top: 5px; padding-bottom: 5px; }
-
-body:not(.login) .pesan,
-body:not(.login) .toast { padding-top: 7px; padding-bottom: 7px; }
-
-body:not(.login) .paginasi { padding-top: 0; padding-bottom: 0; }
-
-body:not(.login) .paginasi button { min-height: 28px; padding-top: 4px; padding-bottom: 4px; }
+table.tf-tabel[data-cari] tbody tr:hover td,
+table.tf-tabel[data-paginasi] tbody tr:hover td {
+  background-color: rgba(100, 116, 139, .07);
+}
 
 @media print {
-.paginasi { display: none !important; }
+.paginasi {
+    display: none !important;
+  }
 
-table[data-paginasi] tr, table[data-cari] tr { display: table-row !important; }
+table.tf-tabel[data-paginasi] tr,
+  table.tf-tabel[data-cari] tr {
+    display: table-row !important;
+  }
 
-table[data-paginasi] tr.baris-detail:not(.terbuka), table[data-cari] tr.baris-detail:not(.terbuka) { display: none !important; }
+table.tf-tabel[data-paginasi] tr.baris-detail:not(.terbuka),
+  table.tf-tabel[data-cari] tr.baris-detail:not(.terbuka) {
+    display: none !important;
+  }
 
-table[data-paginasi] tr.baris-kosong, table[data-cari] tr.baris-kosong { display: none !important; }}
+table.tf-tabel[data-paginasi] tr.baris-kosong,
+  table.tf-tabel[data-cari] tr.baris-kosong {
+    display: none !important;
+  }}
 
-@media (max-width: 760px) {
-body:not(.login) input:not([type="checkbox"]):not([type="radio"]),
-  body:not(.login) select,
-  body:not(.login) button,
-  body:not(.login) .tombol,
-  body:not(.login) .tombol-buka-form { min-height: 38px; }}
-
-body:not(.login) .samping .sc-tombol,
-body:not(.login) .samping > .logo select {
-  min-height: 32px;
-  padding: 6px 9px;
-  border-color: rgba(255, 255, 255, .2);
-  border-radius: 8px;
-  background: rgba(3, 26, 54, .28);
-  color: #f5fbff;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
+.mk-kartu {
+  border-radius: 20px;
 }
 
-body:not(.login) .samping .sc-tombol:hover,
-body:not(.login) .samping .sc-tombol:focus-visible { background: rgba(3, 26, 54, .46); }
-
-body:not(.login) .samping .sc-label.sc-kosong-teks,
-body:not(.login) .samping .sc-panah { color: rgba(231, 247, 255, .72); }
-
-.mk-kartu { border-radius: 20px; }
-
-/* Hero Dashboard: tombol sekunder harus terbaca di atas gradasi biru
-   (aturan .tombol.abu generik menimpanya menjadi pil putih teks putih). */
-body:not(.login) .dashboard-hero .tombol.abu {
-  background: rgba(255, 255, 255, .12);
-  border-color: rgba(255, 255, 255, .22);
-  color: #fff;
-  box-shadow: none;
-  backdrop-filter: blur(8px);
-}
-
-body:not(.login) .dashboard-hero .tombol.abu:hover {
-  background: rgba(255, 255, 255, .2);
-  border-color: rgba(255, 255, 255, .38);
-}
-
-details.panel-lipat > summary .kecil-teks { font-weight: 500; }
-
-@media (max-width: 760px) {
-#wadah-toast { top: 70px; right: 12px; }}
-
-/* === Fase 2 (2026-11-22): komponen ala Apple ===
-   Tombol pil, segmented control, sidebar pil, KPI lingkaran, modal sheet. */
-
-/* 1) Tombol pil penuh + rasa tertekan; target sentuh lebih besar di ponsel. */
-body:not(.login) .tombol,
-body:not(.login) button:not(.sc-tombol):not(.toast-tutup):not(.parent) {
-  border-radius: 999px;
-}
-
-body:not(.login) .tombol:active,
-body:not(.login) button:not(.sc-tombol):not(.toast-tutup):not(.parent):active {
-  transform: scale(.98);
+details.panel-lipat>summary .kecil-teks {
+  font-weight: 500;
 }
 
 @media (max-width: 760px) {
-body:not(.login) .paginasi button { min-height: 40px; min-width: 40px; }
-
-body:not(.login) .aksi .tombol,
-  body:not(.login) .aksi button { min-height: 44px; }}
+#wadah-toast {
+    top: 70px;
+    right: 12px;
+  }}
 
 /* 5) Modal: latar blur; di ponsel menjadi sheet menempel di bawah. */
 .mk-lapik {
@@ -1176,7 +843,10 @@ body:not(.login) .aksi .tombol,
 }
 
 @media (max-width: 760px) {
-.mk-lapik { align-items: flex-end; padding: 0; }
+.mk-lapik {
+    align-items: flex-end;
+    padding: 0;
+  }
 
 .mk-kartu {
     width: 100% !important;
@@ -1187,97 +857,274 @@ body:not(.login) .aksi .tombol,
     padding-bottom: calc(18px + env(safe-area-inset-bottom));
   }}
 
-/* Fase 2 koreksi: tombol hero ikut pil penuh (aturan hero lama lebih spesifik). */
-body:not(.login) .dashboard-hero .tombol,
-body:not(.login) .dashboard-hero .tombol.abu {
-  border-radius: 999px;
-}
-
 @keyframes tulang-geser {
-  0% { background-position: 120% 0; }
-  100% { background-position: -80% 0; }
+  0% {
+    background-position: 120% 0;
+  }
+
+  100% {
+    background-position: -80% 0;
+  }
 }
 
 /* Modal sedikit lebih ramping; bantalan bawah sheet ponsel dipertahankan. */
-.mk-kartu { padding: 20px; }
+.mk-kartu {
+  padding: 20px;
+}
 
 @media (max-width: 760px) {
-.mk-kartu { padding-bottom: calc(18px + env(safe-area-inset-bottom)); }}
+.mk-kartu {
+    padding-bottom: calc(18px + env(safe-area-inset-bottom));
+  }}
 
-/* Paginasi desktop: tinggi tombol 28 -> 32px, selaras tombol kecil. */
-body:not(.login) .paginasi button { min-height: 32px; }
+table.tabel-acuan th,
+table.tabel-acuan td {
+  white-space: normal;
+  overflow-wrap: break-word;
+}
 
-/* Teks kecil di area isi: warna lama #a3a3a3 terlalu pudar di latar
-   terang (kontras sekitar 2,5:1); digelapkan khusus mode terang. */
-html:not(.gelap) body:not(.login) .isi .kecil-teks { color: #5b6b82; }
+table.tabel-acuan th.angka,
+table.tabel-acuan td.angka {
+  white-space: nowrap;
+}
 
-table.tabel-acuan th, table.tabel-acuan td { white-space: normal; overflow-wrap: break-word; }
-
-table.tabel-acuan th.angka, table.tabel-acuan td.angka { white-space: nowrap; }
-
-/* Tombol cetak ikon (XS) per jenis dokumen di halaman BAP & BAST. */
+/* Tombol cetak gaya Apple per jenis dokumen di halaman BAP & BAST:
+   pil penuh + bayangan halus + efek tekan, sama seperti keluarga
+   button/.tombol — warna tetap membedakan jenis dokumen. */
 .tombol-cetak {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  min-width: 24px;
-  height: 24px;
-  padding: 0 6px;
-  border-radius: 6px;
+  gap: 5px;
+  min-height: 26px;
+  padding: 3px 12px;
+  border: 1px solid transparent;
+  border-radius: 999px;
   color: #fff;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
+  letter-spacing: .01em;
+  text-decoration: none;
   vertical-align: middle;
   margin-left: 4px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, .08), 0 1px 3px rgba(16, 24, 40, .06);
+  transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease, transform .12s ease, filter .18s ease;
 }
 
-.tombol-cetak:hover { filter: brightness(1.15); color: #fff; }
+.tombol-cetak:hover {
+  filter: brightness(1.12);
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(16, 24, 40, .12), 0 1px 3px rgba(16, 24, 40, .08);
+}
+
+.tombol-cetak:active {
+  transform: scale(.97);
+  box-shadow: 0 0 0 rgba(16, 24, 40, 0);
+}
 
 /* ===== Form modal helper (form_modal()) — koreksi AMWAL 25 Nov 2026 =====
    Judul rata kiri di pita kepala yang sedikit lebih gelap; kaki tombol
    juga sedikit lebih gelap; label field duduk DI BORDER isian
    (label-on-border); validasi wajib tampil sebagai tooltip merah. */
-.fm-kartu { padding: 0; overflow: hidden; --fm-latar: #fff; }
+.fm-kartu {
+  padding: 0;
+  overflow: hidden;
+  --fm-latar: #fff;
+}
 
-html.gelap .fm-kartu { --fm-latar: #1c2534; }
+.fm-kepala {
+  padding: 13px 20px;
+  background: rgba(16, 24, 40, .055);
+  border-bottom: 1px solid var(--ta-garis);
+}
 
-.fm-kepala { padding: 13px 20px; background: rgba(16, 24, 40, .055); border-bottom: 1px solid var(--ta-garis); }
+html.gelap .fm-kepala {
+  background: rgba(255, 255, 255, .07);
+}
 
-html.gelap .fm-kepala { background: rgba(255, 255, 255, .07); }
+.fm-kepala h3 {
+  margin: 0;
+  text-align: left;
+}
 
-.fm-kepala h3 { margin: 0; text-align: left; }
+.fm-isi {
+  padding: 20px 20px 8px;
+}
 
-.fm-isi { padding: 20px 20px 8px; }
+.fm-grid {
+  row-gap: 23px;
+}
 
-.fm-grid { row-gap: 23px; }
+.tanggal-bungkus {
+  display: inline-flex;
+  gap: 4px;
+  align-items: stretch;
+  width: 100%;
+  position: relative;
+}
 
-.tanggal-bungkus { display: inline-flex; gap: 4px; align-items: stretch; width: 100%; position: relative; }
+.tanggal-bungkus .isian-tanggal {
+  flex: 1 1 auto;
+  min-width: 0;
+}
 
-.tanggal-bungkus .isian-tanggal { flex: 1 1 auto; min-width: 0; }
+.tanggal-bungkus .tanggal-pilih {
+  position: absolute;
+  right: 40px;
+  bottom: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
 
-.tanggal-bungkus .tanggal-pilih { position: absolute; right: 40px; bottom: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.tmbl-kalender {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 9px;
+  cursor: pointer;
+}
 
-.tmbl-kalender { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; padding: 0 9px; cursor: pointer; }
+.fm-kaki {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 12px 20px;
+  margin-top: 10px;
+  background: rgba(16, 24, 40, .055);
+  border-top: 1px solid var(--ta-garis);
+}
 
-.fm-kaki { display: flex; gap: 8px; justify-content: flex-end; align-items: center; padding: 12px 20px; margin-top: 10px; background: rgba(16, 24, 40, .055); border-top: 1px solid var(--ta-garis); }
+html.gelap .fm-kaki {
+  background: rgba(255, 255, 255, .07);
+}
 
-html.gelap .fm-kaki { background: rgba(255, 255, 255, .07); }
+.fm-kotak-field {
+  position: relative;
+}
 
-.fm-kotak-field { position: relative; }
+.fm-kotak-field input,
+.fm-kotak-field select,
+.fm-kotak-field textarea {
+  width: 100%;
+}
 
-.fm-kotak-field input, .fm-kotak-field select, .fm-kotak-field textarea { width: 100%; }
+.fm-label {
+  position: absolute;
+  top: 0;
+  left: 10px;
+  transform: translateY(-50%);
+  background: var(--fm-latar);
+  padding: 0 5px;
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--ta-teks-2);
+  pointer-events: none;
+  z-index: 2;
+  white-space: nowrap;
+}
 
-.fm-label { position: absolute; top: 0; left: 10px; transform: translateY(-50%); background: var(--fm-latar); padding: 0 5px; font-size: 11px; font-weight: 600; line-height: 1.4; color: var(--ta-teks-2); pointer-events: none; z-index: 2; white-space: nowrap; }
+.fm-kotak-field:focus-within .fm-label {
+  color: var(--ta-biru);
+}
 
-.fm-kotak-field:focus-within .fm-label { color: var(--ta-biru); }
+.fm-wajib {
+  color: #d92d20;
+}
 
-.fm-wajib { color: #d92d20; }
+.fm-salah {
+  border-color: #d92d20 !important;
+  box-shadow: 0 0 0 3px rgba(217, 45, 32, .15);
+}
 
-.fm-salah { border-color: #d92d20 !important; box-shadow: 0 0 0 3px rgba(217, 45, 32, .15); }
+.fm-tooltip {
+  position: fixed;
+  z-index: 500;
+  max-width: 260px;
+  background: #b42318;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  padding: 6px 10px;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(16, 24, 40, .25);
+  pointer-events: none;
+}
 
-.fm-tooltip { position: fixed; z-index: 500; max-width: 260px; background: #b42318; color: #fff; font-size: 11.5px; font-weight: 600; line-height: 1.35; padding: 6px 10px; border-radius: 8px; box-shadow: 0 8px 24px rgba(16, 24, 40, .25); pointer-events: none; }
+.fm-tooltip::after {
+  content: '';
+  position: absolute;
+  left: 16px;
+  bottom: -5px;
+  border: 5px solid transparent;
+  border-top-color: #b42318;
+  border-bottom: 0;
+}
 
-.fm-tooltip::after { content: ''; position: absolute; left: 16px; bottom: -5px; border: 5px solid transparent; border-top-color: #b42318; border-bottom: 0; }
+.fm-tooltip.bawah::after {
+  bottom: auto;
+  top: -5px;
+  border-top: 0;
+  border-bottom: 5px solid #b42318;
+}
+/* ===== Penyesuaian paket (bukan dari app.css PBJ) =====
+   Kotak cari tabel dibuat paginasi.js tanpa kelas; di PBJ tampilannya
+   mengikuti gaya input global aplikasi yang tidak ikut terekstrak,
+   jadi paket memberinya bingkai sendiri. */
+.paginasi.cari-tabel input[type="search"] {
+  border: 1px solid var(--ta-garis-2);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 11.2px;
+  font-family: inherit;
+  background: #fff;
+  color: var(--ta-teks);
+}
 
-.fm-tooltip.bawah::after { bottom: auto; top: -5px; border-top: 0; border-bottom: 5px solid #b42318; }
+.paginasi.cari-tabel input[type="search"]:focus {
+  outline: none;
+  border-color: var(--ta-biru-500);
+  box-shadow: 0 0 0 3px var(--ta-biru-50);
+}
+
+/* Tombol aksi baris tabel (sel_aksi): kecil, berbingkai, sebaris —
+   sengaja BUKAN .tombol pil agar tidak bertabrakan dengan penata
+   tombol global aplikasi pemakai (ikon otomatis, target sentuh). */
+.tf-aksi {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+  font-family: inherit;
+  border: 1px solid var(--ta-garis-2);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ta-teks);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tf-aksi:hover {
+  background: var(--ta-biru-50);
+  border-color: var(--ta-biru-500);
+  color: var(--ta-biru);
+}
+
+.tf-aksi.bahaya {
+  color: #800000;
+  border-color: #d8a7a7;
+}
+
+.tf-aksi.bahaya:hover {
+  background: #fdeded;
+  border-color: #800000;
+  color: #800000;
+}

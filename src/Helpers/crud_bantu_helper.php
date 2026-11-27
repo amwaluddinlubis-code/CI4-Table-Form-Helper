@@ -132,7 +132,7 @@ if (! function_exists('crud_bantu')) {
             $h .= '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px">';
             $h .= $judul !== '' ? '<h3 style="margin:0">' . esc($judul) . '</h3>' : '<span></span>';
             if ($tambah !== false) {
-                $h .= '<button type="button" class="tombol" onclick="bukaFormModal(\'' . esc($modalId, 'attr') . '\')">+ ' . esc((string) $tambah) . '</button>';
+                $h .= '<button type="button" class="tombol" style="display:inline-flex;align-items:center;gap:6px;flex:none;white-space:nowrap" onclick="bukaFormModal(\'' . esc($modalId, 'attr') . '\')">' . esc((string) $tambah) . '</button>';
             }
             $h .= '</div>';
         }

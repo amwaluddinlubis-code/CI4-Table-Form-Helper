@@ -102,7 +102,7 @@ if (! function_exists('sel_aksi')) {
         $h = '';
         if (! empty($opsi['modal'])) {
             $json = esc(json_encode($data, JSON_HEX_APOS | JSON_HEX_QUOT) ?: '{}', 'attr');
-            $h .= '<button type="button" onclick="bukaFormModal(\'' . esc((string) $opsi['modal'], 'attr') . '\', ' . $json . ')">'
+            $h .= '<button type="button" class="tf-aksi" onclick="bukaFormModal(\'' . esc((string) $opsi['modal'], 'attr') . '\', ' . $json . ')">'
                 . esc((string) ($opsi['teks_ubah'] ?? 'Ubah')) . '</button>';
         }
         if (! empty($opsi['hapus'])) {
@@ -113,7 +113,7 @@ if (! function_exists('sel_aksi')) {
             $h .= '<form method="post" action="' . esc($url, 'attr') . '" data-konfirmasi="'
                 . esc((string) ($opsi['konfirmasi'] ?? 'Hapus baris ini?'), 'attr') . '" style="display:inline">'
                 . csrf_field()
-                . '<button type="submit" class="tombol bahaya">' . esc((string) ($opsi['teks_hapus'] ?? 'Hapus')) . '</button></form>';
+                . '<button type="submit" class="tf-aksi bahaya">' . esc((string) ($opsi['teks_hapus'] ?? 'Hapus')) . '</button></form>';
         }
         return ['html' => $h];
     }

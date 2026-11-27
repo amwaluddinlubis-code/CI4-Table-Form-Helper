@@ -4,6 +4,40 @@ Semua perubahan penting paket ini dicatat di berkas ini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id/1.1.0/),
 versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [1.2.1] - 2026-11-28
+
+### Diperbaiki
+
+- **CSS paket tidak lagi menimpa aplikasi pemakai.** Hasil ekstraksi
+  dari app.css aplikasi sumber sebelumnya membawa aturan elemen
+  global (`button { ... }`, `table { ... }`) dan lapisan tema
+  aplikasi sumber (aturan `body:not(.login) ...` bertoken `--ui-*`)
+  yang mengubah seluruh shell aplikasi pemakai di halaman yang
+  memuat CSS paket (insiden SPJ BOSP). Kini: aturan tombol hanya
+  berlaku untuk kelas `.tombol`, aturan tabel hanya untuk
+  `table.tf-tabel`, lapisan tema aplikasi sumber dibuang saat
+  sinkron, dan token `--ui-*` dipetakan ke token paket `--ta-*`.
+  `tools/sinkron.py` menegakkan pelingkupan ini pada setiap sinkron
+  berikutnya (gagal keras bila pola global muncul lagi).
+- `tabel_bantu()` selalu memasang kelas `tf-tabel` pada tabelnya;
+  tombol Ekspor CSV pada `paginasi.js` memakai kelas
+  `tombol kecil ekspor`.
+- Kotak pencarian tabel kini berbingkai dari CSS paket (sebelumnya
+  mengikuti gaya input global aplikasi sumber yang tidak ikut
+  terekstrak, sehingga tampil tanpa bingkai di aplikasi pemakai).
+- Select `form_modal()` dan `select_cari()` membawa atribut
+  `data-native-select` — opt-out bagi pengaya select global milik
+  aplikasi pemakai (mis. daisy-select SPJ BOSP) agar select paket
+  tidak diperkaya dua kali dan tampil sebagai dropdown ganda.
+  Select Per halaman pada `paginasi.js` juga membawanya.
+- `crud_bantu()`: tombol Tambah tidak lagi memakai awalan teks
+  "+ " (bertabrakan dengan ikon plus otomatis milik aplikasi
+  pemakai) dan dirender sebaris flex yang tidak membungkus.
+- `sel_aksi()`: tombol Ubah/Hapus memakai kelas khusus `.tf-aksi`
+  (kecil, berbingkai, varian `.bahaya` untuk Hapus) menggantikan
+  pil `.tombol`/tanpa kelas, agar selaras dengan penata tombol
+  aplikasi pemakai dan baris tabel tidak menjadi tinggi.
+
 ## [1.2.0] - 2026-11-28
 
 ### Ditambahkan
