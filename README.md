@@ -10,6 +10,8 @@ Paket ini diekstrak dari aplikasi nyata [PBJ-REVIT](https://github.com/amwaluddi
 | --- | --- |
 | `src/Helpers/tabel_form_helper.php` | `tabel_bantu()`, `sel_tabel_html()`, `form_modal()`, `select_cari()` |
 | `src/Helpers/tabel_form_plus_helper.php` | `flash_toast()`, `kolom_aksi()`, `sel_aksi()` |
+| `src/Helpers/crud_bantu_helper.php` | `crud_bantu()` — blok CRUD lengkap (kepala + tabel aksi + modal) dari satu konfigurasi |
+| `src/Controllers/CrudBantuTrait.php` | Pasangan sisi server `crud_bantu()`: ambil/konversi POST, simpan/hapus via model, balasan AJAX/redirect |
 | `src/Views/modal_konfirmasi.php` | Modal konfirmasi bersama (Hapus dsb.) + toast notifikasi |
 | `src/Commands/Publish.php` | Perintah `php spark tabel-form:publish` untuk menyalin aset ke proyek |
 | `assets/tabel-form.css` | Gaya tabel, modal form, modal konfirmasi, toast, select-cari, paginasi, isian tanggal |
@@ -175,6 +177,51 @@ Pasangan untuk kolom aksi otomatis di `tabel_bantu()` — tanpa menulis markup t
 ```
 
 Teks tombol dapat diganti lewat `'teks_ubah'` / `'teks_hapus'`; kosongkan `'modal'` atau `'hapus'` untuk menyembunyikan tombolnya.
+
+## `crud_bantu(array $konfig): string` (v1.2.0)
+
+Satu panggilan merender **blok CRUD lengkap**: kepala berisi judul + tombol Tambah, tabel dengan kolom aksi otomatis, dan modal form untuk tambah/ubah — definisi kolomnya menyatu untuk tabel dan form. Pasangan sisi servernya `Ci4TabelForm\Controllers\CrudBantuTrait`. Contoh lengkap: `examples/CrudBantu.php`.
+
+```php
+<?= crud_bantu([
+    'id' => 'barang', 'judul' => 'Data Barang',
+    'kolom' => [
+        ['nama' => 'nama', 'label' => 'Nama Barang', 'jenis' => 'teks', 'wajib' => true],
+        ['nama' => 'harga', 'label' => 'Harga', 'jenis' => 'uang', 'format' => 'uang'],
+        ['nama' => 'jenis', 'label' => 'Jenis', 'jenis' => 'pilihan',
+         'opsi' => ['baru' => 'Baru', 'bekas' => 'Bekas']],
+    ],
+    'baris' => $barang,                       // daftar array/objek, wajib ada kunci 'id'
+    'aksi' => 'barang/simpan',                // tambah & ubah dibedakan dari hidden 'id'
+    'aksi_hapus' => 'barang/hapus/__ID__',
+    'konfirmasi_hapus' => 'Hapus barang ini?',
+    'cari' => 'Cari barang…', 'paginasi' => 25,
+]) ?>
+```
+
+Kunci penting: `'grup_dari'` (nama kolom — pergantian nilainya menyisipkan baris grup), `'format'` per kolom (`uang` / `angka` / `tanggal` / callable untuk tampilan sel), `'tabel_saja'` / `'form_saja'` per kolom, `'kunci_id'` (bawaan `id`), `'tambah' => false` (tanpa tombol tambah), `'kosong'` (teks saat tidak ada baris). Controller memakai trait-nya:
+
+```php
+use Ci4TabelForm\Controllers\CrudBantuTrait;
+
+class Barang extends BaseController
+{
+    use CrudBantuTrait;
+
+    public function simpan()
+    {
+        $data = $this->crudAmbilData(['nama' => 'teks', 'harga' => 'uang', 'jenis' => 'pilihan']);
+        if ($data['nama'] === '') {
+            return $this->crudBalas(false, 'Nama wajib diisi.', 'barang');
+        }
+        $ok = $this->crudSimpanData(new BarangModel(), $data, $this->request->getPost('id'));
+
+        return $this->crudBalas($ok, $ok ? 'Barang tersimpan.' : 'Gagal menyimpan.', 'barang');
+    }
+}
+```
+
+`crudAmbilData()` mengonversi menurut jenis (`uang` → int polos, `angka` → float, `tanggal` dd-mm-yyyy → yyyy-mm-dd); `crudBalas()` menjawab JSON `{ok, pesan}` untuk AJAX dan redirect + flash untuk permintaan biasa.
 
 ## Perbedaan kecil dari versi aplikasi asal
 

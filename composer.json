@@ -1,6 +1,6 @@
 {
     "name": "amwaluddinlubis/ci4-tabel-form-helper",
-    "description": "Helper tabel daftar dan form modal CRUD untuk CodeIgniter 4: tabel_bantu() + form_modal() dari konfigurasi, lengkap dengan paginasi/pencarian tabel, select searchable, isian tanggal dd-mm-yyyy, dan field uang.",
+    "description": "Helper tabel daftar dan form modal CRUD untuk CodeIgniter 4: tabel_bantu() + form_modal() + crud_bantu() dari konfigurasi, lengkap dengan paginasi/pencarian tabel, select searchable, isian tanggal dd-mm-yyyy, dan field uang.",
     "type": "library",
     "license": "MIT",
     "authors": [

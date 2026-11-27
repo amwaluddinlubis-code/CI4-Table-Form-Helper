@@ -4,6 +4,30 @@ Semua perubahan penting paket ini dicatat di berkas ini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id/1.1.0/),
 versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [1.2.0] - 2026-11-28
+
+### Ditambahkan
+
+- `crud_bantu()` — satu panggilan merender blok CRUD lengkap:
+  kepala (judul + tombol Tambah), `tabel_bantu()` dengan kolom
+  aksi otomatis (Ubah membuka modal berisi data baris, Hapus lewat
+  konfirmasi), dan `form_modal()` untuk tambah/ubah. Definisi
+  kolom menyatu untuk tabel dan form (`tabel_saja` / `form_saja`
+  memisahkan bila perlu), format sel `uang` / `angka` / `tanggal` /
+  callable, dan baris grup otomatis lewat `grup_dari`.
+- `Ci4TabelForm\Controllers\CrudBantuTrait` — pasangan sisi
+  server: `crudAmbilData()` (konversi POST menurut jenis field),
+  `crudSimpanData()` / `crudHapusData()` (insert/update/delete
+  duck-typed lewat model), dan `crudBalas()` (JSON untuk AJAX,
+  redirect + flash untuk permintaan biasa).
+- Contoh satu berkas: `examples/CrudBantu.php`.
+- Tes bertambah menjadi 33 tes / 116 asersi.
+
+Kedua berkas baru dirawat di paket (di luar jangkauan sinkron):
+`src/Helpers/crud_bantu_helper.php` dan
+`src/Controllers/CrudBantuTrait.php`; muat helper dengan
+`helper(['tabel_form', 'tabel_form_plus', 'crud_bantu'])`.
+
 ## [1.1.0] - 2026-11-27
 
 ### Ditambahkan
