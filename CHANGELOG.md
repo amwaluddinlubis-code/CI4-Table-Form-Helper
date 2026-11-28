@@ -4,6 +4,18 @@ Semua perubahan penting paket ini dicatat di berkas ini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id/1.1.0/),
 versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [1.2.2] - 2026-11-28
+
+### Diperbaiki
+
+- **Label `select_cari()` tidak lagi basi sesudah form di-reset.**
+  `form.reset()` mengembalikan nilai select ke bawaan HTML tanpa
+  memicu peristiwa `change`, sehingga widget menampilkan pilihan
+  sebelumnya (mis. modal Tambah sesudah modal Ubah menampilkan induk
+  baris yang diubah, sementara nilai select sudah kembali ke bawaan —
+  temuan QA browser SPJ BOSP). `select-cari.js` kini menyegarkan
+  labelnya sesudah setiap reset form pemilik.
+
 ## [1.2.1] - 2026-11-28
 
 ### Diperbaiki
